@@ -49,6 +49,8 @@ class ExternalContentSource extends DataObject
 		"Hierarchy",
 	);
 
+	public static $icon = 'sapphire/javascript/tree/images/page-file.gif';
+
 	/**
 	 * Get the object represented by an external ID
 	 * 

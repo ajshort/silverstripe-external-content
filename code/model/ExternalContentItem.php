@@ -46,6 +46,8 @@ class ExternalContentItem extends DataObject
 		"Hierarchy",
 	);
 
+	public static $icon = 'sapphire/javascript/tree/images/page-file.gif';
+
 	protected $ownerId;
 	
 	/**
