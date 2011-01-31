@@ -1,0 +1,8 @@
+--- 
+repository_url: http://jstree.googlecode.com/svn/tags/v.1.0rc2
+lock: false
+repository_class: Piston::Svn::Repository
+format: 1
+handler: 
+  piston:uuid: 7ee4f3fb-cb41-0410-822c-dd8830bd4fbc
+  piston:remote-revision: 233
