@@ -21,8 +21,6 @@ OF SUCH DAMAGE.
  
 */
 
-define('EXTERNALCONTENT', 'external-content');
-
 /**
  * Backend administration pages for the external content module
  * 
