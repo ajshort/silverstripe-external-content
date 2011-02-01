@@ -12,7 +12,10 @@ class ExternalContentAdmin extends ModelAdmin {
 		'ExternalContentSource' => array(
 			'record_controller' => 'ExternalContentAdmin_SourceController'
 		),
-		'ExternalContentItem'
+		'ExternalContentItem' => array(
+			'collection_controller' => 'ExternalContentAdmin_ItemCollectionController',
+			'record_controller'     => 'ExternalContentAdmin_ItemController'
+		)
 	);
 
 	public static $allowed_actions = array(
@@ -207,6 +210,33 @@ class ExternalContentAdmin_SourceController extends ExternalContentAdmin_RecordC
 		} else {
 			return $this->redirectBack();
 		}
+	}
+
+}
+
+class ExternalContentAdmin_ItemCollectionController extends ModelAdmin_CollectionController {
+
+	public function handleActionOrID($request) {
+		return $this->handleID($request);
+	}
+
+}
+
+class ExternalContentAdmin_ItemController extends ExternalContentAdmin_RecordController {
+
+	public function __construct($parent, $request, $recordID = null) {
+		$this->parentController = $parent;
+		$this->currentRecord = ExternalContent::getDataObjectFor(
+			$recordID ? $recordID : $request->param('Action')
+		);
+
+		Controller::__construct();
+	}
+
+	public function EditForm() {
+		$form = parent::EditForm();
+		$form->setActions(new FieldSet());
+		return $form;
 	}
 
 }
