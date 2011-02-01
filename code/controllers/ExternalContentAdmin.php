@@ -142,6 +142,10 @@ class ExternalContentAdmin_RecordController extends ModelAdmin_RecordController 
 		$isItem   = $record instanceof ExternalContentItem;
 
 		if (($isSource || $isItem) && $record->canImport()) {
+			$fields->addFieldToTab(
+				'Root.Import', new HiddenField('ID', null, $this->currentRecord->ID)
+			);
+
 			$targets = $record->allowedImportTargets();
 
 			if (isset($targets['sitetree'])) {
@@ -188,6 +192,63 @@ class ExternalContentAdmin_RecordController extends ModelAdmin_RecordController 
 		}
 
 		return $form;
+	}
+
+	/**
+	 * Creates and runs an importer to import data form an external connector to
+	 * the local site.
+	 *
+	 * @param  array $data
+	 * @param  Form $form
+	 * @return SS_HTTPResponse
+	 */
+	public function doImport($data, $form) {
+		$id       = isset($data['ID']) ? $data['ID'] : false;
+		$target   = isset($data['MigrationTarget']) ? $data['MigrationTarget'] : false;
+		$file     = isset($data['FileMigrationTarget']) ? $data['FileMigrationTarget'] : false;
+		$selected = isset($data['IncludeSelected']) ? $data['IncludeSelected'] : false;
+		$children = isset($data['IncludeChildren']) ? $data['IncludeChildren'] : false;
+
+		$duplicates = isset($data['DuplicateMethod'])
+			? $data['DuplicateMethod']
+			: ExternalContentTransformer::DS_OVERWRITE;
+
+		if (!$id || (!$target && !$file)) {
+			return new SS_HTTPResponse(null, 400, _t(
+				'ExternalContent.INVALIDREQUEST', 'Invalid Request'
+			));
+		}
+
+		if ($target) {
+			$type   = 'SiteTree';
+			$target = DataObject::get_by_id('SiteTree', $target);
+		} else {
+			$type   = 'File';
+			$target = DataObject::get_by_id('File', $file);
+		}
+
+		$from = ExternalContent::getDataObjectFor($id);
+
+		if ($from instanceof ExternalContentSource) {
+			$selected = false;
+		}
+
+		$importer = $from->getContentImporter($type);
+
+		if ($importer) {
+			$importer->import(
+				$from,
+				$target,
+				$selected,
+				$children,
+				$duplicates,
+				$data);
+		}
+
+		return new SS_HTTPResponse(null, 200, sprintf(
+			_t('ExternalContent.STARTINGIMPORT', 'Starting import to %s'),
+			$target->Title
+		));
 	}
 
 }
