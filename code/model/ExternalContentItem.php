@@ -159,7 +159,7 @@ class ExternalContentItem extends DataObject
 	 * @return String
 	 */
 	function TreeTitle() {
-		return $this->Name;
+		return $this->Title;
 	}
 
 	/**
