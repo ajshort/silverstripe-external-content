@@ -117,6 +117,23 @@ $("#form_actions_right input").live("click", function() {
 	return false;
 });
 
+$("#action_doImport").live("click", function() {
+	var $form   = $("#right form");
+	var $button = $(this).addClass("loading");
+	var action  = $form.attr("action") + "?action_doImport=1";
+
+	$.ajax({
+		type:     'POST',
+		url:      action,
+		data:     $form.formToArray(),
+		complete: responseHandler(function() {
+			$button.removeClass("loading");
+		})
+	});
+
+	return false;
+});
+
 /**
  * A simple wrapper around an AJAX request response handler function that shows
  * the status text attached to the response as a status message.
@@ -126,6 +143,11 @@ $("#form_actions_right input").live("click", function() {
  */
 function responseHandler(callback) {
 	return function(response, status, xhr) {
+		if (response.status) {
+			xhr = response;
+			response = xhr.responseText;
+		}
+
 		if(status == "success") {
 			statusMessage(xhr.statusText, "good");
 		} else {

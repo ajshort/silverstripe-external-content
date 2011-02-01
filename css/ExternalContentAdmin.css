@@ -13,3 +13,5 @@
 #Form_CreateSourceForm option { padding: 1px; }
 #Form_CreateSourceForm fieldset { float: left; }
 #Form_CreateSourceForm .Actions { float: left; padding-left: 3px; }
+
+button.loading { padding-left: 22px; background: url(../../cms/images/network-save.gif) 3px 2px no-repeat; }
