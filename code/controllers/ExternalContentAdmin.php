@@ -126,10 +126,63 @@ class ExternalContentAdmin_RecordController extends ModelAdmin_RecordController 
 	 * @return Form
 	 */
 	public function EditForm() {
-		$form = parent::EditForm();
+		$form   = parent::EditForm();
+		$record = $this->currentRecord;
+		$fields = $form->Fields();
 
 		$form->Actions()->removeByName('action_goForward');
 		$form->Actions()->removeByName('action_goBack');
+
+		// If we're editing an external source or item, and it can be imported
+		// then add the "Import" tab.
+		$isSource = $record instanceof ExternalContentSource;
+		$isItem   = $record instanceof ExternalContentItem;
+
+		if (($isSource || $isItem) && $record->canImport()) {
+			$targets = $record->allowedImportTargets();
+
+			if (isset($targets['sitetree'])) {
+				$fields->addFieldToTab('Root.Import', new TreeDropdownField(
+					'MigrationTarget',
+					_t('ExternalContent.MIGRATE_TARGET', 'Page to import into'),
+					'SiteTree'
+				));
+			}
+
+			if (isset($allowedTypes['file'])) {
+				$fields->addFieldToTab('Root.Import', new TreeDropdownField(
+					'FileMigrationTarget',
+					_t('ExternalContent.FILE_MIGRATE_TARGET', 'Folder to import into'),
+					'Folder'
+				));
+			}
+
+			$fields->addFieldsToTab('Root.Import', array(
+				new CheckboxField('IncludeSelected',
+					_t('ExternalContent.INCLUDE_SELECTED', 'Include Selected Item in Import')),
+				new CheckboxField('IncludeChildren',
+					_t('ExternalContent.INCLUDE_CHILDREN', 'Include Child Items in Import'), true)
+			));
+
+			$strategies = array(
+				ExternalContentTransformer::DS_OVERWRITE => ExternalContentTransformer::DS_OVERWRITE,
+				ExternalContentTransformer::DS_DUPLICATE => ExternalContentTransformer::DS_DUPLICATE,
+				ExternalContentTransformer::DS_SKIP      => ExternalContentTransformer::DS_SKIP,
+			);
+
+			$fields->addFieldToTab('Root.Import', new OptionsetField(
+				'DuplicateMethod',
+				_t('ExternalContent.DUPLICATES', 'Select how duplicate items should be handled'),
+				$strategies
+			));
+
+			$fields->addFieldToTab('Root.Import', $action = new FormAction_WithoutLabel(
+				'doImport'
+			));
+
+			$action->setButtonContent(_t('ExternalContent.IMPORT', 'Start Importing'));
+			$action->useButtonTag = true;
+		}
 
 		return $form;
 	}
