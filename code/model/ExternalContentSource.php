@@ -96,7 +96,15 @@ class ExternalContentSource extends DataObject
 	}
 
 	/**
-	 * Child classes should provide connection details to the external 
+	 * @return string
+	 */
+	public function Icon() {
+		$icon = $this->stat('icon');
+		return $icon . (!strpos($icon, '.') ? '-file.gif' : '');
+	}
+
+	/**
+	 * Child classes should provide connection details to the external
 	 * content source
 	 * 
 	 * @see sapphire/core/model/DataObject#getCMSFields($params)

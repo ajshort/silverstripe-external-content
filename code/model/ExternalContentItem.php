@@ -163,6 +163,14 @@ class ExternalContentItem extends DataObject
 	}
 
 	/**
+	 * @return string
+	 */
+	public function Icon() {
+		$icon = $this->stat('icon');
+		return $icon . (!strpos($icon, '.') ? '-file.gif' : '');
+	}
+
+	/**
 	 * Where this can be downloaded from
 	 * 
 	 * @return string
