@@ -123,6 +123,10 @@ class ExternalContentAdmin extends ModelAdmin {
 
 }
 
+/**
+ * An extension to the default record controller to allow performing imports on
+ * external content.
+ */
 class ExternalContentAdmin_RecordController extends ModelAdmin_RecordController {
 
 	/**
@@ -253,6 +257,10 @@ class ExternalContentAdmin_RecordController extends ModelAdmin_RecordController 
 
 }
 
+/**
+ * Handles returning an edit form for an external content source, as well as deleting
+ * them.
+ */
 class ExternalContentAdmin_SourceController extends ExternalContentAdmin_RecordController {
 
 	/**
@@ -275,14 +283,27 @@ class ExternalContentAdmin_SourceController extends ExternalContentAdmin_RecordC
 
 }
 
+/**
+ * Handles deferring control to an individual item.
+ */
 class ExternalContentAdmin_ItemCollectionController extends ModelAdmin_CollectionController {
 
+	/**
+	 * Since no actions can be performed on an item collection, just fall over
+	 * to the ID.
+	 *
+	 * @param  SS_HTTPRequest $request
+	 * @return ExternalContentAdmin_ItemController
+	 */
 	public function handleActionOrID($request) {
 		return $this->handleID($request);
 	}
 
 }
 
+/**
+ * Returns an edit form for an individual external content item.
+ */
 class ExternalContentAdmin_ItemController extends ExternalContentAdmin_RecordController {
 
 	public function __construct($parent, $request, $recordID = null) {
