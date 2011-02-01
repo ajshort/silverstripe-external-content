@@ -1,0 +1,15 @@
+#left { background: #FFF; }
+#left #TreeTools { background: #EEE; overflow: auto; }
+#left #TreeActions { border-bottom: 1px solid #CCC; width: 100%; padding: 0; }
+#left #TreeActions li { margin: 5px; }
+
+#ExternalItems { margin-top: 3px; background: none; }
+#ExternalItems li { line-height: 22px; }
+#ExternalItems li a { font-size: 11px; }
+
+#Form_CreateSourceForm { clear: both; border-bottom: 1px solid #CCC; padding: 5px; overflow: auto; display: none; }
+#Form_CreateSourceForm .middleColumn { width: 200px; padding-top: 2px; }
+#Form_CreateSourceForm select { margin: 0; font-size: 12px; }
+#Form_CreateSourceForm option { padding: 1px; }
+#Form_CreateSourceForm fieldset { float: left; }
+#Form_CreateSourceForm .Actions { float: left; padding-left: 3px; }

@@ -1,31 +1,16 @@
-<h2><% _t('EXTERNAL_CONTENT.Connectors','Connectors') %></h2>
-<div id="treepanes" style="overflow-y: auto;">
+<% require javascript(external-content/thirdparty/jquery-jstree/jquery.jstree.js) %>
+<% require javascript(external-content/javascript/ExternalContentAdmin.js) %>
+<% require css(external-content/css/ExternalContentAdmin.css) %>
+
+<h2><% _t('CONNECTORS', 'Connectors') %></h2>
+
+<div id="TreeTools">
 	<ul id="TreeActions">
-		<li class="action" id="addpage"><button><% _t('CREATE','Create',PR_HIGH) %></button></li>
-		<li class="action" id="deletepage"><button><% _t('DELETE', 'Delete') %></button></li>
+		<li class="action">
+			<button id="ToggleCreateForm"><% _t('CREATE', 'Create') %></button>
+		</li>
 	</ul>
-	<div style="clear:both;"></div>
-	<!--
-	Sneaky form definition to hide the ability to select variations on the provider to create. Will
-	need to update this later to support other providers... possibly.
-
-	<form class="actionparams" id="addpage_options" style="display: none" action="admin/external-content/addprovider">
-		<div>
-		<input type="hidden" name="ParentID" />
-		<input class="action" type="submit" value="<% _t('GO','Go') %>" />
-		</div>
-	</form>-->
-	<% control CreateProviderForm %>
-		<form class="actionparams" id="$FormName" action="$FormAction">
-			<% control Fields %>
-			$FieldHolder
-			<% end_control %>
-		</form>
-	<% end_control %>
-
-	$DeleteItemsForm
-	<form class="actionparams" id="sortitems_options" style="display: none">
-		<p id="sortitems_message" style="margin: 0"><% _t('TOREORG','To reorganise your folders, drag them around as desired.') %></p>
-	</form>
-	$SiteTreeAsUL
+	$CreateSourceForm
 </div>
+
+<div id="ExternalItems" href="$Link(tree)"></div>
